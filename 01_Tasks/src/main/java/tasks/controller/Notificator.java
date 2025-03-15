@@ -53,6 +53,7 @@ public class Notificator extends Thread {
 
             } catch (InterruptedException e) {
                 log.error("thread interrupted exception");
+                Thread.currentThread().interrupt();
             }
             currentDate = new Date();
         }

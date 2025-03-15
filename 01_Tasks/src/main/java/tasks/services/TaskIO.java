@@ -19,6 +19,9 @@ public class TaskIO {
     private static final int secondsInHour = 3600;
     private static final int secondsInMin = 60;
 
+    private TaskIO() {
+        throw new IllegalStateException("Utility class");
+    }
     private static final Logger log = Logger.getLogger(TaskIO.class.getName());
     public static void write(TaskList tasks, OutputStream out) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(out);
@@ -47,7 +50,6 @@ public class TaskIO {
         try {
             int listLength = dataInputStream.readInt();
             for (int i = 0; i < listLength; i++){
-                int titleLength = dataInputStream.readInt();
                 String title = dataInputStream.readUTF();
                 boolean isActive = dataInputStream.readBoolean();
                 int interval = dataInputStream.readInt();

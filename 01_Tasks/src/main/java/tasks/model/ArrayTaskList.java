@@ -51,7 +51,7 @@ public class ArrayTaskList extends TaskList{
 
     @Override
     public void add(Task task){
-        if (task.equals(null)) throw new NullPointerException("Task shouldn't be null");
+        if ( task == null ) throw new NullPointerException("Task shouldn't be null");
         if (numberOfTasks == currentCapacity-1){
             currentCapacity = currentCapacity * 2;
             Task[] withAddedTask = new Task[currentCapacity];
@@ -135,13 +135,12 @@ public class ArrayTaskList extends TaskList{
                 ", currentCapacity=" + currentCapacity +
                 '}';
     }
-    @Override
-    protected ArrayTaskList clone() throws CloneNotSupportedException {
-        ArrayTaskList tasks = new ArrayTaskList();
-        for (int i = 0; i < this.tasks.length; i++){
-            tasks.add(this.getTask(i));
+    public ArrayTaskList( ArrayTaskList arrayTaskList){
+        this.currentCapacity = arrayTaskList.currentCapacity;
+        this.numberOfTasks = arrayTaskList.numberOfTasks;
+        this.tasks = new Task[currentCapacity];
+        for (int i = 0; i < arrayTaskList.size(); i++){
+            this.tasks[i] = arrayTaskList.getTask(i);
         }
-        return tasks;
-
     }
 }
