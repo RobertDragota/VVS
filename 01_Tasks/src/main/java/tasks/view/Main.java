@@ -17,17 +17,32 @@ import java.io.File;
 import java.io.IOException;
 
 public class Main extends Application {
-    public static Stage primaryStage;
+    private static Stage primaryStage;
     private static final int defaultWidth = 820;
     private static final int defaultHeight = 520;
     private static final Logger log = Logger.getLogger(Main.class.getName());
 
-    private ArrayTaskList savedTasksList = new ArrayTaskList();
+    private final ArrayTaskList savedTasksList = new ArrayTaskList();
 
-    private static ClassLoader classLoader = Main.class.getClassLoader();
-    public static File savedTasksFile = new File("data/tasks.txt");
+    private static File savedTasksFile = new File("data/tasks.txt");
 
     private TasksService service = new TasksService(savedTasksList);//savedTasksList);
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static void setPrimaryStage(Stage primaryStage) {
+        Main.primaryStage = primaryStage;
+    }
+
+    public static File getSavedTasksFile() {
+        return savedTasksFile;
+    }
+
+    public static void setSavedTasksFile(File savedTasksFile) {
+        Main.savedTasksFile = savedTasksFile;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -39,7 +54,7 @@ public class Main extends Application {
         try {
             log.info("application start");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-            Parent root = loader.load();//loader.load(this.getClass().getResource("/fxml/main.fxml"));
+            Parent root = loader.load();
             Controller ctrl= loader.getController();
             service = new TasksService(savedTasksList);
 

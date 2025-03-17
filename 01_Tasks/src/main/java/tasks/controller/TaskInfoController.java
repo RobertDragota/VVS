@@ -20,18 +20,19 @@ public class TaskInfoController {
     private Label labelIsActive;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         log.info("task info window initializing");
-        Task currentTask = (Task)Controller.mainTable.getSelectionModel().getSelectedItem();
+        Task currentTask = (Task) Controller.getMainTable().getSelectionModel().getSelectedItem();
         labelTitle.setText("Title: " + currentTask.getTitle());
         labelStart.setText("Start time: " + currentTask.getFormattedDateStart());
         labelEnd.setText("End time: " + currentTask.getFormattedDateEnd());
         labelInterval.setText("Interval: " + currentTask.getFormattedRepeated());
         labelIsActive.setText("Is active: " + (currentTask.isActive() ? "Yes" : "No"));
     }
+
     @FXML
-    public void closeWindow(){
-        Controller.infoStage.close();
+    public void closeWindow() {
+        Controller.getInfoStage().close();
     }
 
 }

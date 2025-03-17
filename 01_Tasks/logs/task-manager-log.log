@@ -81,3 +81,12 @@
 2025-03-15 22:40:27 INFO  TaskInfoController:24 - task info window initializing
 2025-03-15 22:40:33 INFO  TaskInfoController:24 - task info window initializing
 2025-03-15 22:40:49 INFO  TaskInfoController:24 - task info window initializing
+2025-03-15 23:00:38 INFO  Main:35 - saved data reading
+2025-03-15 23:00:38 INFO  Main:40 - application start
+2025-03-15 23:00:38 INFO  Controller:74 - Main controller initializing
+2025-03-17 22:46:34 INFO  Main:50 - saved data reading
+2025-03-17 22:46:34 INFO  Main:55 - application start
+2025-03-17 22:46:34 INFO  Controller:94 - Main controller initializing
+2025-03-17 22:50:59 INFO  Main:50 - saved data reading
+2025-03-17 22:50:59 INFO  Main:55 - application start
+2025-03-17 22:50:59 INFO  Controller:94 - Main controller initializing

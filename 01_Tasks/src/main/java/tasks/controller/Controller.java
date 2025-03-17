@@ -26,17 +26,37 @@ import java.util.Date;
 
 public class Controller {
     private static final Logger log = Logger.getLogger(Controller.class.getName());
-    public ObservableList<Task> tasksList;
+    private ObservableList<Task> tasksList;
     TasksService service;
     DateService dateService;
 
-    public static Stage editNewStage;
-    public static Stage infoStage;
+    private static Stage editNewStage;
+    private static Stage infoStage;
 
-    public static TableView mainTable;
+    private static TableView mainTable;
+
+    public static TableView getMainTable() {
+        return mainTable;
+    }
+
+    public static Stage getEditNewStage() {
+        return editNewStage;
+    }
+
+    public static void setEditNewStage(Stage editNewStage) {
+        Controller.editNewStage = editNewStage;
+    }
+
+    public static Stage getInfoStage() {
+        return infoStage;
+    }
+
+    public static void setInfoStage(Stage infoStage) {
+        Controller.infoStage = infoStage;
+    }
 
     @FXML
-    public  TableView tasks;
+    private  TableView tasks;
     @FXML
     private TableColumn<Task, String> columnTitle;
     @FXML
@@ -96,7 +116,7 @@ public class Controller {
             editCtrl.setCurrentTask((Task)mainTable.getSelectionModel().getSelectedItem());
             editNewStage.setScene(new Scene(root, 600, 350));
             editNewStage.setResizable(false);
-            editNewStage.initOwner(Main.primaryStage);
+            editNewStage.initOwner(Main.getPrimaryStage());
             editNewStage.initModality(Modality.APPLICATION_MODAL);//??????
             editNewStage.show();
         }
