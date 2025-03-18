@@ -1,0 +1,30 @@
+2025-03-18 18:11:58 INFO  Main:50 - saved data reading
+2025-03-18 18:11:58 INFO  Main:55 - application start
+2025-03-18 18:11:58 INFO  Controller:94 - Main controller initializing
+2025-03-18 18:21:14 INFO  Main:50 - saved data reading
+2025-03-18 18:21:14 INFO  Main:55 - application start
+2025-03-18 18:21:14 INFO  Controller:94 - Main controller initializing
+2025-03-18 18:29:20 INFO  Main:50 - saved data reading
+2025-03-18 18:29:20 INFO  Main:55 - application start
+2025-03-18 18:29:20 INFO  Controller:94 - Main controller initializing
+2025-03-18 18:29:56 INFO  Main:50 - saved data reading
+2025-03-18 18:29:56 INFO  Main:55 - application start
+2025-03-18 18:29:56 INFO  Controller:94 - Main controller initializing
+2025-03-18 18:31:17 INFO  Main:50 - saved data reading
+2025-03-18 18:31:17 INFO  Main:55 - application start
+2025-03-18 18:31:17 INFO  Controller:94 - Main controller initializing
+2025-03-18 18:31:19 INFO  NewEditController:90 - new/edit window initializing
+2025-03-18 18:31:44 INFO  NewEditController:200 - Task{title='tasknou', time=Tue Mar 18 08:00:00 EET 2025, start=Tue Mar 18 08:00:00 EET 2025, end=Tue Mar 18 08:00:00 EET 2025, interval=0, active=true}
+2025-03-18 18:31:44 ERROR TaskIO:69 - IO exception reading or writing file
+2025-03-18 18:31:54 INFO  Main:50 - saved data reading
+2025-03-18 18:31:54 INFO  Main:55 - application start
+2025-03-18 18:31:54 INFO  Controller:94 - Main controller initializing
+2025-03-18 21:04:35 INFO  Main:50 - saved data reading
+2025-03-18 21:04:35 INFO  Main:55 - application start
+2025-03-18 21:04:35 INFO  Controller:94 - Main controller initializing
+2025-03-18 21:05:04 INFO  NewEditController:90 - new/edit window initializing
+2025-03-18 21:05:08 INFO  NewEditController:200 - Task{title='orice', time=Tue Mar 18 08:00:00 EET 2025, start=Tue Mar 18 08:00:00 EET 2025, end=Tue Mar 18 08:00:00 EET 2025, interval=0, active=false}
+2025-03-18 21:05:08 ERROR TaskIO:69 - IO exception reading or writing file
+2025-03-18 21:05:20 INFO  Main:50 - saved data reading
+2025-03-18 21:05:20 INFO  Main:55 - application start
+2025-03-18 21:05:20 INFO  Controller:94 - Main controller initializing
