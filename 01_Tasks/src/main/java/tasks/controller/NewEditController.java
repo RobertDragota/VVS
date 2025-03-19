@@ -131,13 +131,15 @@ public class NewEditController {
         incorrectInputMade = false;
         try {
             Date start = dateService.getDateMergedWithTime(
-                    txtFieldTimeStart.getText(),
-                    dateService.getDateValueFromLocalDate(datePickerStart.getValue())
+
+                    dateService.getDateValueFromLocalDate(datePickerStart.getValue()),
+                    txtFieldTimeStart.getText()
             );
             if (checkBoxRepeated.isSelected()) {
                 Date end = dateService.getDateMergedWithTime(
-                        txtFieldTimeEnd.getText(),
-                        dateService.getDateValueFromLocalDate(datePickerEnd.getValue())
+
+                        dateService.getDateValueFromLocalDate(datePickerEnd.getValue()),
+                        txtFieldTimeEnd.getText()
                 );
                 // Parse selections from the three ComboBoxes.
                 int day = Integer.parseInt(comboBoxDay.getValue());

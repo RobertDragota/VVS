@@ -42,7 +42,7 @@ public class DateService {
      * @param baseDate Base Date object.
      * @return Date with merged time.
      */
-    public Date getDateMergedWithTime(String time, Date baseDate) {
+    public Date getDateMergedWithTime( Date baseDate, String time) {
         String[] timeUnits = time.split(":");
         if (timeUnits.length != 2) throw new IllegalArgumentException("Invalid time format. Use HH:MM");
 
