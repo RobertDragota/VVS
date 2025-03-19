@@ -1,46 +1,13 @@
 package tasks.model;
 
-
 import org.apache.log4j.Logger;
-
 import java.util.*;
 
 public class ArrayTaskList extends TaskList {
-
     private Task[] tasks;
     private int numberOfTasks;
     private int currentCapacity;
     private static final Logger log = Logger.getLogger(ArrayTaskList.class.getName());
-
-    private class ArrayTaskListIterator implements Iterator<Task> {
-        private int cursor;
-        private int lastCalled = -1;
-
-        @Override
-        public boolean hasNext() {
-            return cursor < numberOfTasks;
-        }
-
-        @Override
-        public Task next() {
-            if (!hasNext()) {
-                log.error("next iterator element doesn't exist");
-                throw new NoSuchElementException("No next element");
-            }
-            lastCalled = cursor;
-            return getTask(cursor++);
-        }
-
-        @Override
-        public void remove() {
-            if (lastCalled == -1) {
-                throw new IllegalStateException();
-            }
-            ArrayTaskList.this.remove(getTask(lastCalled));
-            cursor = lastCalled;
-            lastCalled = -1;
-        }
-    }
 
     public ArrayTaskList() {
         currentCapacity = 10;
@@ -49,35 +16,43 @@ public class ArrayTaskList extends TaskList {
 
     @Override
     public Iterator<Task> iterator() {
-        return new ArrayTaskListIterator();
+        return new ArrayTaskListIterator(this);
+    }
+
+    private void ensureCapacity() {
+        if (numberOfTasks >= currentCapacity) {
+            currentCapacity *= 2;
+            tasks = Arrays.copyOf(tasks, currentCapacity);
+        }
+    }
+
+    public void trimToSize() {
+        if (numberOfTasks < currentCapacity) {
+            currentCapacity = numberOfTasks;
+            tasks = Arrays.copyOf(tasks, numberOfTasks);
+        }
     }
 
     @Override
     public void add(Task task) {
         if (task == null) throw new NullPointerException("Task shouldn't be null");
-        if (numberOfTasks == currentCapacity - 1) {
-            currentCapacity = currentCapacity * 2;
-            Task[] withAddedTask = new Task[currentCapacity];
-            System.arraycopy(tasks, 0, withAddedTask, 0, tasks.length);
-            this.tasks = withAddedTask;
-        }
-        this.tasks[numberOfTasks] = task;
-        this.numberOfTasks++;
+        ensureCapacity();
+        tasks[numberOfTasks++] = task;
     }
 
     @Override
     public boolean remove(Task task) {
+        if (task == null) return false;
         int indexOfTaskToDelete = -1;
-        for (int i = 0; i < tasks.length; i++) {
+        for (int i = 0; i < numberOfTasks; i++) {
             if (task.equals(tasks[i])) {
                 indexOfTaskToDelete = i;
                 break;
             }
         }
         if (indexOfTaskToDelete >= 0) {
-            this.numberOfTasks--;
-            System.arraycopy(tasks, indexOfTaskToDelete + 1, tasks, indexOfTaskToDelete,
-                    numberOfTasks - indexOfTaskToDelete + 1);
+            System.arraycopy(tasks, indexOfTaskToDelete + 1, tasks, indexOfTaskToDelete, numberOfTasks - indexOfTaskToDelete - 1);
+            tasks[--numberOfTasks] = null;
             return true;
         }
         return false;
@@ -90,17 +65,16 @@ public class ArrayTaskList extends TaskList {
 
     @Override
     public Task getTask(int index) {
-        if (index < 0 || index > size() - 1) {
+        if (index < 0 || index >= size()) {
             log.error("not existing index");
             throw new IndexOutOfBoundsException("Index not found");
         }
-
         return tasks[index];
     }
 
     @Override
     public List<Task> getAll() {
-        return new ArrayList<>(Arrays.asList(this.tasks).subList(0, this.numberOfTasks));
+        return Arrays.asList(Arrays.copyOf(tasks, numberOfTasks));
     }
 
     @Override
@@ -109,32 +83,18 @@ public class ArrayTaskList extends TaskList {
         if (o == null || getClass() != o.getClass()) return false;
 
         ArrayTaskList that = (ArrayTaskList) o;
-
-        if (numberOfTasks != that.numberOfTasks) return false;
-        int i = 0;
-
-        // Check if all tasks are equal
-        for (Task task : tasks) {
-            if (!task.equals(that.tasks[i++])) {
-                return false;
-            }
-        }
-
-        return true;
+        return numberOfTasks == that.numberOfTasks && Arrays.equals(Arrays.copyOf(tasks, numberOfTasks), Arrays.copyOf(that.tasks, that.numberOfTasks));
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(tasks);
-        result = 31 * result + numberOfTasks;
-        result = 31 * result + currentCapacity;
-        return result;
+        return Objects.hash(Arrays.hashCode(Arrays.copyOf(tasks, numberOfTasks)), numberOfTasks, currentCapacity);
     }
 
     @Override
     public String toString() {
         return "ArrayTaskList{" +
-                "tasks=" + Arrays.toString(tasks) +
+                "tasks=" + Arrays.toString(Arrays.copyOf(tasks, numberOfTasks)) +
                 ", numberOfTasks=" + numberOfTasks +
                 ", currentCapacity=" + currentCapacity +
                 '}';
@@ -143,9 +103,6 @@ public class ArrayTaskList extends TaskList {
     public ArrayTaskList(ArrayTaskList arrayTaskList) {
         this.currentCapacity = arrayTaskList.currentCapacity;
         this.numberOfTasks = arrayTaskList.numberOfTasks;
-        this.tasks = new Task[currentCapacity];
-        for (int i = 0; i < arrayTaskList.size(); i++) {
-            this.tasks[i] = arrayTaskList.getTask(i);
-        }
+        this.tasks = Arrays.copyOf(arrayTaskList.tasks, currentCapacity);
     }
 }
