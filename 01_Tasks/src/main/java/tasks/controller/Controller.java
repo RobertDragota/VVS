@@ -1,3 +1,4 @@
+// File: src/main/java/tasks/controller/Controller.java
 package tasks.controller;
 
 import javafx.collections.FXCollections;
@@ -78,20 +79,15 @@ public class Controller {
     @FXML
     public void showTaskDialog(ActionEvent actionEvent) {
         NewEditController.setClickedButton((Button) actionEvent.getSource());
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/new-edit-task.fxml"));
             Parent root = loader.load();
             NewEditController editCtrl = loader.getController();
-
             editCtrl.setService(service);
             editCtrl.setTasksList(tasksList);
-
             editNewStage = new Stage();
-            // Set the stage in the static field before using it
             NewEditController.setCurrentStage(editNewStage);
             editCtrl.setCurrentTask(mainTable.getSelectionModel().getSelectedItem());
-
             editNewStage.setScene(new Scene(root, 600, 350));
             editNewStage.setResizable(false);
             editNewStage.setTitle("Edit Task");
@@ -100,6 +96,22 @@ public class Controller {
             editNewStage.show();
         } catch (IOException e) {
             log.error("Error loading /fxml/new-edit-task.fxml", e);
+        }
+    }
+
+    // New method to open the Week Filter window.
+    public void openWeekFilter() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WeekFilter.fxml"));
+            Parent root = loader.load();
+            WeekFilterController controller = loader.getController();
+            controller.setTasksService(this.service);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 400, 300));
+            stage.setTitle("Week Filter Tasks");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -125,7 +137,6 @@ public class Controller {
             Parent root = loader.load();
             TaskInfoController infoCtrl = loader.getController();
             infoCtrl.setTask(selectedTask);
-
             infoStage = new Stage();
             infoStage.setScene(new Scene(root, 550, 350));
             infoStage.setResizable(false);
@@ -142,10 +153,8 @@ public class Controller {
     public void showFilteredTasks() {
         Date start = getDateFromFilterField(datePickerFrom.getValue(), fieldTimeFrom.getText());
         Date end = getDateFromFilterField(datePickerTo.getValue(), fieldTimeTo.getText());
-
         List<Task> filteredTasks = new ArrayList<>();
         service.filterTasks(start, end).forEach(filteredTasks::add);
-
         ObservableList<Task> observableTasks = FXCollections.observableList(filteredTasks);
         tasks.setItems(observableTasks);
         updateCountLabel();

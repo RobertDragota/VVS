@@ -6,7 +6,15 @@ import javafx.collections.ObservableList;
 import tasks.repository.ArrayTaskList;
 import tasks.model.Task;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.IsoFields;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,5 +136,36 @@ public class TasksService {
             task.setActive(isActive);
             return task;
         }
+    }
+
+    /**
+     * Returns tasks whose start date fall on even or odd weeks.
+     * @param filterDate If true, returns tasks in even weeks; if false, returns tasks in odd weeks.
+     * @return List of tasks filtered by week parity.
+     */
+    public List<Task> getTasksForWeek(LocalDate filterDate) {
+        List<Task> filteredTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            LocalDate taskStart = task.getStartTime().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate taskWeekStart = taskStart.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            LocalDate filterWeekStart = filterDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            long weeksDiff = ChronoUnit.WEEKS.between(taskWeekStart, filterWeekStart);
+            if (weeksDiff < 0) {
+                continue;
+            }
+            if (!task.isRepeated() && weeksDiff == 0) {
+                filteredTasks.add(task);
+            } else if (task.isRepeated()) {
+                int recurrenceWeeks = task.getRepeatInterval() / 604800; // 604800 seconds in a week
+                if (recurrenceWeeks <= 0) {
+                    recurrenceWeeks = 1;
+                }
+                if (weeksDiff % recurrenceWeeks == 0) {
+                    filteredTasks.add(task);
+                }
+            }
+        }
+        return filteredTasks;
     }
 }
