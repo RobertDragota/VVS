@@ -31,7 +31,6 @@ public class TaskInfoController {
             log.error("No task selected for info display");
             return;
         }
-
         labelTitle.setText("Title: " + currentTask.getTitle());
         labelStart.setText("Start time: " + currentTask.getFormattedDateStart());
         labelEnd.setText("End time: " + currentTask.getFormattedDateEnd());
