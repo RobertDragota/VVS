@@ -24,6 +24,8 @@ public class TasksOperations {
         }
         return incomingTasks;
     }
+
+
     public SortedMap<Date, Set<Task>> calendar( Date start, Date end){
         Iterable<Task> incomingTasks = incoming(start, end);
         TreeMap<Date, Set<Task>> calendar = new TreeMap<>();

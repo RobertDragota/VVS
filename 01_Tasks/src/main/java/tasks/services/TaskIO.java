@@ -2,7 +2,7 @@ package tasks.services;
 
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
-import tasks.model.LinkedTaskList;
+import tasks.model.ArrayTaskList;
 import tasks.model.Task;
 import tasks.model.TaskList;
 import tasks.view.*;
@@ -288,7 +288,7 @@ public class TaskIO {
 
 
     public static void rewriteFile(ObservableList<Task> tasksList) {
-        LinkedTaskList taskList = new LinkedTaskList();
+        ArrayTaskList taskList = new ArrayTaskList();
         for (Task t : tasksList){
             taskList.add(t);
         }

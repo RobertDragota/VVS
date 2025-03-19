@@ -87,12 +87,6 @@ public class NewEditController {
     @FXML
     public void initialize(){
         log.info("new/edit window initializing");
-//        switch (clickedButton.getId()){
-//            case  "btnNew" : initNewWindow("New Task");
-//                break;
-//            case "btnEdit" : initEditWindow("Edit Task");
-//                break;
-//        }
 
     }
     private void initNewWindow(String title){
