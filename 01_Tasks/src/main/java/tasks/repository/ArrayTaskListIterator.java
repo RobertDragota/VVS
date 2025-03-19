@@ -1,8 +1,9 @@
-package tasks.model;
+package tasks.repository;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
+import tasks.model.Task;
 
 public class ArrayTaskListIterator implements Iterator<Task> {
     private static final Logger log = Logger.getLogger(ArrayTaskListIterator.class.getName());

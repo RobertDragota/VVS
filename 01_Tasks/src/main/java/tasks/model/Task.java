@@ -2,7 +2,7 @@
 package tasks.model;
 
 import org.apache.log4j.Logger;
-import tasks.services.TaskIO;
+import tasks.utils.TaskIO;
 import tasks.validator.Validation;
 import tasks.validator.TaskValidator;
 

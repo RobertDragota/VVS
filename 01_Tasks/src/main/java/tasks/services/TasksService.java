@@ -2,9 +2,8 @@ package tasks.services;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import tasks.model.ArrayTaskList;
+import tasks.repository.ArrayTaskList;
 import tasks.model.Task;
-import tasks.model.TasksOperations;
 
 import java.util.Date;
 

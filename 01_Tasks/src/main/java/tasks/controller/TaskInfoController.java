@@ -2,12 +2,12 @@ package tasks.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import tasks.model.Task;
-
 import org.apache.log4j.Logger;
+import tasks.model.Task;
 
 public class TaskInfoController {
     private static final Logger log = Logger.getLogger(TaskInfoController.class.getName());
+
     @FXML
     private Label labelTitle;
     @FXML
@@ -19,20 +19,30 @@ public class TaskInfoController {
     @FXML
     private Label labelIsActive;
 
-    @FXML
-    public void initialize(){
-        log.info("task info window initializing");
-        Task currentTask = (Task)Controller.mainTable.getSelectionModel().getSelectedItem();
+    private Task currentTask;
+
+    public void setTask(Task task) {
+        this.currentTask = task;
+        updateTaskDetails();
+    }
+
+    private void updateTaskDetails() {
+        if (currentTask == null) {
+            log.error("No task selected for info display");
+            return;
+        }
+
         labelTitle.setText("Title: " + currentTask.getTitle());
         labelStart.setText("Start time: " + currentTask.getFormattedDateStart());
         labelEnd.setText("End time: " + currentTask.getFormattedDateEnd());
         labelInterval.setText("Interval: " + currentTask.getFormattedRepeated());
         labelIsActive.setText("Is active: " + (currentTask.isActive() ? "Yes" : "No"));
     }
+
     @FXML
-    public void closeWindow(){
-        Controller.infoStage.close();
+    public void closeWindow() {
+        if (Controller.getInfoStage() != null) {
+            Controller.getInfoStage().close();
+        }
     }
-
 }
-

@@ -1,7 +1,8 @@
-package tasks.model;
+package tasks.repository;
+
+import tasks.model.Task;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
 public abstract class TaskList implements Iterable<Task>, Serializable  {
