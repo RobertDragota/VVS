@@ -1,3 +1,4 @@
+// Java
 package tasks.services;
 
 import javafx.collections.FXCollections;
@@ -6,6 +7,8 @@ import tasks.repository.ArrayTaskList;
 import tasks.model.Task;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TasksService {
     private final ArrayTaskList tasks;
@@ -45,17 +48,52 @@ public class TasksService {
     }
 
     /**
-     * Converts a string time format (HH:MM) to seconds.
-     * @param timeString The time string (e.g., "02:30").
+     * Converts a time string to seconds.
+     * Supports HH:MM format or a numeric value with a unit (days, weeks, months, hours, minutes).
+     * For months, 30 days are assumed.
+     *
+     * @param timeString The time string (e.g., "02:30", "1 day", "2 weeks", "3 months").
      * @return Time in seconds.
      */
     public int convertTimeToSeconds(String timeString) {
-        String[] units = timeString.split(":");
-        if (units.length != 2) throw new IllegalArgumentException("Invalid time format. Use HH:MM");
-
-        int hours = Integer.parseInt(units[0]);
-        int minutes = Integer.parseInt(units[1]);
-        return (hours * DateService.MINUTES_IN_HOUR + minutes) * DateService.SECONDS_IN_MINUTE;
+        if (timeString == null || timeString.trim().isEmpty()) {
+            throw new IllegalArgumentException("Time string cannot be empty");
+        }
+        timeString = timeString.trim();
+        // Check if time is in HH:MM format
+        if (timeString.matches("\\d{1,2}:\\d{2}")) {
+            String[] parts = timeString.split(":");
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
+            return (hours * DateService.MINUTES_IN_HOUR + minutes) * DateService.SECONDS_IN_MINUTE;
+        }
+        // Otherwise, check for numeric value with unit (e.g., "1 day", "2 weeks")
+        Pattern pattern = Pattern.compile("(\\d+)\\s*(day|days|week|weeks|month|months|hour|hours|minute|minutes)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(timeString);
+        if (matcher.find()) {
+            int value = Integer.parseInt(matcher.group(1));
+            String unit = matcher.group(2).toLowerCase();
+            switch(unit) {
+                case "day":
+                case "days":
+                    return value * 24 * 3600;
+                case "week":
+                case "weeks":
+                    return value * 7 * 24 * 3600;
+                case "month":
+                case "months":
+                    return value * 30 * 24 * 3600;
+                case "hour":
+                case "hours":
+                    return value * 3600;
+                case "minute":
+                case "minutes":
+                    return value * 60;
+                default:
+                    break;
+            }
+        }
+        throw new IllegalArgumentException("Invalid time format. Use HH\\:MM or specify unit (days, weeks, months, hours, minutes)");
     }
 
     /**

@@ -1,6 +1,6 @@
-// Java
 package tasks.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +22,6 @@ import java.util.Date;
 
 public class NewEditController {
     private static final Logger log = Logger.getLogger(NewEditController.class.getName());
-
     private static Button clickedButton;
     private static Stage currentStage;
 
@@ -42,8 +41,15 @@ public class NewEditController {
     private DatePicker datePickerEnd;
     @FXML
     private TextField txtFieldTimeEnd;
+
+    // Remove previous interval controls and add three ComboBoxes for days, weeks, and months
     @FXML
-    private TextField fieldInterval;
+    private ComboBox<String> comboBoxDay;
+    @FXML
+    private ComboBox<String> comboBoxWeek;
+    @FXML
+    private ComboBox<String> comboBoxMonth;
+
     @FXML
     private CheckBox checkBoxActive;
     @FXML
@@ -51,7 +57,10 @@ public class NewEditController {
 
     private static final String DEFAULT_START_TIME = "08:00";
     private static final String DEFAULT_END_TIME = "10:00";
-    private static final String DEFAULT_INTERVAL_TIME = "00:30";
+    // Default selections for interval; for a repeated task only one should be non-zero.
+    private static final String DEFAULT_DAY = "0";
+    private static final String DEFAULT_WEEK = "0";
+    private static final String DEFAULT_MONTH = "0";
 
     public static void setClickedButton(Button clickedButton) {
         NewEditController.clickedButton = clickedButton;
@@ -81,6 +90,28 @@ public class NewEditController {
         if (fieldTitle != null && fieldTitle.getScene() != null) {
             currentStage = (Stage) fieldTitle.getScene().getWindow();
         }
+        // Initialize combo boxes for day, week and month values.
+        if (comboBoxDay != null) {
+            comboBoxDay.setItems(getNumberOptions(0, 31));
+            comboBoxDay.setValue(DEFAULT_DAY);
+        }
+        if (comboBoxWeek != null) {
+            comboBoxWeek.setItems(getNumberOptions(0, 5));
+            comboBoxWeek.setValue(DEFAULT_WEEK);
+        }
+        if (comboBoxMonth != null) {
+            comboBoxMonth.setItems(getNumberOptions(0, 13));
+            comboBoxMonth.setValue(DEFAULT_MONTH);
+        }
+    }
+
+    // Utility method for generating number options as strings.
+    private ObservableList<String> getNumberOptions(int start, int end) {
+        ObservableList<String> options = FXCollections.observableArrayList();
+        for (int i = start; i < end; i++) {
+            options.add(String.valueOf(i));
+        }
+        return options;
     }
 
     @FXML
@@ -93,9 +124,8 @@ public class NewEditController {
     }
 
     /**
-     * Collects the task data from UI fields.
-     * For repeated tasks, end date and interval are read.
-     * For non-repeated tasks, those fields are ignored.
+     * Collects task data from UI fields. For repeated tasks the method reads the end date and requires
+     * at least one interval unit (days, weeks, or months) to be non-zero.
      */
     private Task collectTaskData() {
         incorrectInputMade = false;
@@ -109,12 +139,35 @@ public class NewEditController {
                         txtFieldTimeEnd.getText(),
                         dateService.getDateValueFromLocalDate(datePickerEnd.getValue())
                 );
+                // Parse selections from the three ComboBoxes.
+                int day = Integer.parseInt(comboBoxDay.getValue());
+                int week = Integer.parseInt(comboBoxWeek.getValue());
+                int month = Integer.parseInt(comboBoxMonth.getValue());
+                // Ensure that at least one interval unit is non-zero.
+                if (day == 0 && week == 0 && month == 0) {
+                    throw new IllegalArgumentException(
+                            "Select at least one non-zero interval unit (days, weeks, or months)."
+                    );
+                }
+                // Construct the interval message.
+                StringBuilder intervalMessage = new StringBuilder("Every ");
+
+                if (month > 0) {
+                    intervalMessage.append(month).append(month == 1 ? " month " : " months ");
+                }
+                if (week > 0) {
+                    intervalMessage.append(week).append(week == 1 ? " week " : " weeks ");
+                }
+                if (day > 0 || (month == 0 && week == 0)) {
+                    intervalMessage.append(day).append(day == 1 ? " day" : " days");
+                }
+
                 return service.createTaskFromFields(
                         fieldTitle.getText(),
                         start,
                         true,
                         end,
-                        fieldInterval.getText(),
+                        intervalMessage.toString(),
                         checkBoxActive.isSelected()
                 );
             } else {
@@ -180,8 +233,19 @@ public class NewEditController {
     }
 
     private void initializeNewTask() {
+        // Explicitly set currentTask to null so the task is added to the list
+        currentTask = null;
         datePickerStart.setValue(LocalDate.now());
         txtFieldTimeStart.setText(DEFAULT_START_TIME);
+        if (comboBoxDay != null) {
+            comboBoxDay.setValue(DEFAULT_DAY);
+        }
+        if (comboBoxWeek != null) {
+            comboBoxWeek.setValue(DEFAULT_WEEK);
+        }
+        if (comboBoxMonth != null) {
+            comboBoxMonth.setValue(DEFAULT_MONTH);
+        }
     }
 
     private void initializeTaskFields() {
@@ -195,7 +259,16 @@ public class NewEditController {
             checkBoxRepeated.setSelected(true);
             datePickerEnd.setValue(dateService.getLocalDateValueFromDate(currentTask.getEndTime()));
             txtFieldTimeEnd.setText(dateService.getTimeOfTheDayFromDate(currentTask.getEndTime()));
-            fieldInterval.setText(service.getIntervalInHours(currentTask));
+            // For editing provide default interval values.
+            if (comboBoxDay != null) {
+                comboBoxDay.setValue(DEFAULT_DAY);
+            }
+            if (comboBoxWeek != null) {
+                comboBoxWeek.setValue(DEFAULT_WEEK);
+            }
+            if (comboBoxMonth != null) {
+                comboBoxMonth.setValue(DEFAULT_MONTH);
+            }
         }
         checkBoxActive.setSelected(currentTask.isActive());
     }
@@ -215,12 +288,28 @@ public class NewEditController {
 
     private void toggleRepeatedTaskFields(boolean disableFields) {
         datePickerEnd.setDisable(disableFields);
-        fieldInterval.setDisable(disableFields);
         txtFieldTimeEnd.setDisable(disableFields);
+        if (comboBoxDay != null) {
+            comboBoxDay.setDisable(disableFields);
+        }
+        if (comboBoxWeek != null) {
+            comboBoxWeek.setDisable(disableFields);
+        }
+        if (comboBoxMonth != null) {
+            comboBoxMonth.setDisable(disableFields);
+        }
         if (!disableFields) {
             datePickerEnd.setValue(LocalDate.now());
             txtFieldTimeEnd.setText(DEFAULT_END_TIME);
-            fieldInterval.setText(DEFAULT_INTERVAL_TIME);
+            if (comboBoxDay != null) {
+                comboBoxDay.setValue(DEFAULT_DAY);
+            }
+            if (comboBoxWeek != null) {
+                comboBoxWeek.setValue(DEFAULT_WEEK);
+            }
+            if (comboBoxMonth != null) {
+                comboBoxMonth.setValue(DEFAULT_MONTH);
+            }
         }
     }
 }

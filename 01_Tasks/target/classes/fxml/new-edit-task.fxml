@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="rootVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tasks.controller.NewEditController">
    <children>
@@ -21,8 +27,16 @@
             <Label layoutX="30.0" layoutY="25.0" text="End" />
             <Label layoutX="30.0" layoutY="80.0" text="Interval" />
             <DatePicker fx:id="datePickerEnd" disable="true" layoutX="94.0" layoutY="20.0" prefHeight="31.0" prefWidth="253.0" />
-            <TextField fx:id="fieldInterval" disable="true" layoutX="94.0" layoutY="75.0" prefHeight="31.0" prefWidth="288.0" promptText="HH:mm" />
             <TextField fx:id="txtFieldTimeEnd" disable="true" layoutX="347.0" layoutY="20.0" prefHeight="31.0" prefWidth="84.0" />
+            <!-- Label and ComboBox for Days -->
+            <Label layoutX="94.0" layoutY="55.0" text="Days" />
+            <ComboBox fx:id="comboBoxDay" disable="true" layoutX="94.0" layoutY="75.0" prefHeight="31.0" prefWidth="80.0" promptText="Days" />
+            <!-- Label and ComboBox for Weeks -->
+            <Label layoutX="184.0" layoutY="55.0" text="Weeks" />
+            <ComboBox fx:id="comboBoxWeek" disable="true" layoutX="184.0" layoutY="75.0" prefHeight="31.0" prefWidth="80.0" promptText="Weeks" />
+            <!-- Label and ComboBox for Months -->
+            <Label layoutX="274.0" layoutY="55.0" text="Months" />
+            <ComboBox fx:id="comboBoxMonth" disable="true" layoutX="274.0" layoutY="75.0" prefHeight="31.0" prefWidth="80.0" promptText="Months" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="134.0" prefWidth="600.0">
