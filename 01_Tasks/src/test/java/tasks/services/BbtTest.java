@@ -28,7 +28,7 @@ public class BbtTest {
     @Test
     public void saveTaskWithValidTitle() {
 
-        Date customStartDate = new Date(70, 0, 1);
+        Date customStartDate = new Date(70, 1, 1);
         Date customEndDate = new Date(124, 11, 31);
 
         Task task = service.createTaskFromFields("Title", customStartDate, false, customEndDate, "Every 7 days", true);
