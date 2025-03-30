@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import tasks.repository.ArrayTaskList;
 import tasks.model.Task;
+import tasks.validator.TaskValidator;
+import tasks.validator.Validation;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -20,7 +22,7 @@ import java.util.regex.Pattern;
 
 public class TasksService {
     private final ArrayTaskList tasks;
-
+    private static final Validation validator = new TaskValidator();
     public TasksService(ArrayTaskList tasks) {
         this.tasks = tasks;
     }
@@ -30,6 +32,7 @@ public class TasksService {
      * @return ObservableList of tasks.
      */
     public ObservableList<Task> getObservableList() {
+
         return FXCollections.observableArrayList(tasks.getAll());
     }
 
@@ -125,17 +128,22 @@ public class TasksService {
      * @return A new Task object.
      */
     public Task createTaskFromFields(String title, Date startDate, boolean isRepeated, Date endDate, String interval, boolean isActive) {
+        Task task = null;
         if (isRepeated) {
             int newInterval = convertTimeToSeconds(interval);
             if (startDate.after(endDate)) throw new IllegalArgumentException("Start date should be before end");
-            Task task = new Task(title, startDate, endDate, newInterval);
+
+            task = new Task(title, startDate, endDate, newInterval);
+
             task.setActive(isActive);
-            return task;
+
         } else {
-            Task task = new Task(title, startDate);
+            task = new Task(title, startDate);
             task.setActive(isActive);
-            return task;
+
         }
+        validator.validateTask(task);
+        return task;
     }
 
     /**

@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><title>testspec Proiect233 - drir3328_BBT</title>
+<link type="text/css" rel="stylesheet" href="https://www.scs.ubbcluj.ro/testlink/gui/themes/default/css/tl_documents.css" />
+<style type="text/css" media="print">.notprintable { display:none;}</style>
+</head>
+<body>
+<div>
+<div style="float:right;">TestLink Community [configure $tlCfg-&gt;document_generator-&gt;company_name]</div>
+<div>&nbsp;</div><hr />
+<p style="text-align: center;"><img alt="TestLink logo" title="configure using $tlCfg->document_generator->company_logo"  width= height= src="https://www.scs.ubbcluj.ro/testlink/gui/themes/default/images/tl-logo-transparent-25.png" /></p></div>
+<div class="doc_title"><p>Test Specification</p></div>
+<div class="doc_title" style="text-align:left;margin: auto;"><p>Test Project: Proiect233<br/>Test Suite: Proiect233 - drir3328_BBT</p></div>
+<div class="summary"><p id="printedby">Printed by TestLink on 30/03/2025</p></div>
+<div class="pagefooter" id="copyright">2012 &copy; TestLink Community</div>
+<h1 class="general" style="page-break-before: always">Table Of Contents</h1><div class="toc"><p style="padding-left: 20px;"><b><a href="#toc_1">1.drir3328_BBT</a></b></p>
+<p style="padding-left: 45px;"><a href="#toc_tc24530">Prj233-14: ECP-Valid</a></p><p style="padding-left: 45px;"><a href="#toc_tc24534">Prj233-15: BVA-Valid</a></p><p style="padding-left: 45px;"><a href="#toc_tc24538">Prj233-16: ECP-Invalid</a></p><p style="padding-left: 45px;"><a href="#toc_tc24548">Prj233-17: BVA-Invalid</a></p></div><h1 class="doclevel" >Scope</h1>
+<div class="txtlevel"><p>Proiect de testare pentru studentii din grupa 233.</p></div>
+ <br/><a name='toc_1'></a>
+<h1 class='doclevel'>1.Test Suite : drir3328_BBT</h1>
+<div><p>Test of&nbsp;the functionality F01.</p>
+</div><a name="toc_tc24530"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case Prj233-14: ECP-Valid&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">drir3328</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>Date is in the interval the lower extreme bound of [1970, 2024]</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><p>Create a task with following properties:</p>
+
+<p>title: Sample</p>
+
+<p>start: 1970-01-01</p>
+
+<p>end: 2024-12-31</p>
+
+<p>repeat: 1</p>
+</td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Automated</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" >tasks.services.BbtTest.java</td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" >tasks.services.BbtTest.saveTaskWithValidTitle()</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">drir3328_F01:  Add new task [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+<a name="toc_tc24534"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case Prj233-15: BVA-Valid&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">drir3328</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>Adds a task in which the title match the required length interval</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><table style="width:90%">
+	<tbody>
+		<tr>
+			<td>
+			<p>Insert a task having this parameters in the constructor:</p>
+
+			<p>title: aaaaaaaaaabbbbbbbbbbcccccccccc</p>
+
+			<p>start: 2023-12-2</p>
+
+			<p>end: 2024-03-28</p>
+
+			<p>repeat 1</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Automated</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" >tasks.services.BbtTest.java</td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" >tasks.services.BbtTest.saveTaskWithValidTitleBva()</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">drir3328_F01:  Add new task [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+<a name="toc_tc24538"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case Prj233-16: ECP-Invalid&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">drir3328</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>The title is empty.</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><table style="width:90%">
+	<tbody>
+		<tr>
+			<td>
+			<p>Add a task with following parameters:</p>
+
+			<p>title:&quot;&nbsp; &nbsp; &quot;</p>
+
+			<p>start:&nbsp; 2023-04-12</p>
+
+			<p>end: 2024-03-28</p>
+
+			<p>repeat: 1</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Automated</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" >tasks.services.BbtTest.java</td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" >tasks.services.BbtTest.saveTaskWithInvalidTitle()</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">drir3328_F01:  Add new task [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+<a name="toc_tc24548"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case Prj233-17: BVA-Invalid&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">drir3328</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>The title length is out of bounds.</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><table style="width:90%">
+	<tbody>
+		<tr>
+			<td>
+			<p>Add a task with following parameters:</p>
+
+			<p>title:&nbsp;aaaaaaaaaabbbbbbbbbbccccccccccd</p>
+
+			<p>start:&nbsp; 2023-04-12</p>
+
+			<p>end: 2024-03-28</p>
+
+			<p>repeat: 1</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Automated</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" >tasks.services.BbtTest.java</td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" >tasks.services.BbtTest.saveTaskWithInvalidTitleBva()</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">drir3328_F01:  Add new task [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+
+</body>
+</html>

@@ -73,7 +73,12 @@ public class NewEditController {
     public void setTasksList(ObservableList<Task> tasksList) {
         this.tasksList = tasksList;
     }
-
+    public int getTasksListSize() {
+        return tasksList.size();
+    }
+    public ObservableList<Task> getTasksList() {
+        return tasksList;
+    }
     public void setService(TasksService service) {
         this.service = service;
         this.dateService = new DateService(service);
@@ -189,7 +194,7 @@ public class NewEditController {
         }
     }
 
-    private void updateTaskList(Task collectedTask) {
+    public void updateTaskList(Task collectedTask) {
         if (currentTask == null) {
             tasksList.add(collectedTask);
         } else {
