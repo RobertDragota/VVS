@@ -12,7 +12,7 @@ public class Notificator extends Thread {
 
     private static final int MILLISECONDS_IN_SEC = 1000;
     private static final int SECONDS_IN_MIN = 60;
-
+    private boolean isRunning = true;
     private static final Logger log = Logger.getLogger(Notificator.class.getName());
 
     private final ObservableList<Task> tasksList;
@@ -24,7 +24,7 @@ public class Notificator extends Thread {
     @Override
     public void run() {
         Date currentDate = new Date();
-        while (true) {
+        while (isRunning) {
 
             for (Task t : tasksList) {
                 if (t.isActive()) {

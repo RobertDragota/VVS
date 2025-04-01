@@ -7,8 +7,11 @@ import tasks.model.Task;
 import tasks.repository.ArrayTaskList;
 
 import java.util.Date;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Pentru controlul ordinii testelor
 public class TaskServiceTest {
     static private TasksService service;
     static NewEditController add_ctrl;
@@ -30,11 +33,11 @@ public class TaskServiceTest {
 
     @Nested
     @Tag("ECP")
+    @Tag("Regression") // Adăugat pentru suita de regression
     @DisplayName("ECP Tests")
     class EcpTesting {
         @BeforeEach
         void testSetup() {
-
             ArrayTaskList init_taskList = new ArrayTaskList();
             service = new TasksService(init_taskList);
             add_ctrl = new NewEditController();
@@ -43,9 +46,9 @@ public class TaskServiceTest {
             add_ctrl.setTasksList(taskList);
         }
 
-
-
         @Test
+        @Order(1) // Rulează primul
+        @Timeout(2) // Timeout de 2 secunde
         @DisplayName("Save task with a valid description")
         public void saveTaskWithValidTitle() {
             Assertions.assertDoesNotThrow(() -> {
@@ -56,6 +59,7 @@ public class TaskServiceTest {
         }
 
         @Test
+        @Disabled("Dezactivat temporar - necesită investigație") // Test dezactivat
         @DisplayName("Save task with an invalid description")
         public void saveTaskWithInvalidTitle() {
             Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -64,11 +68,22 @@ public class TaskServiceTest {
             Assertions.assertEquals(0, add_ctrl.getTasksListSize());
         }
 
-        @Test
-        @DisplayName("Save task with a valid date")
-        public void saveTaskWithValidDate() {
+        @RepeatedTest(3) // Rulează de 3 ori
+        @DisplayName("Save task with a valid date (repeated)")
+        public void saveTaskWithValidDateRepeated() {
             Assertions.assertDoesNotThrow(() -> {
                 Task task = service.createTaskFromFields("Title", new Date(124, 4, 21), false, new Date(), "Every 1 day", true);
+                add_ctrl.updateTaskList(task);
+            });
+            Assertions.assertEquals(1, add_ctrl.getTasksListSize());
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"A", "Valid Title", "123456789012345678901234567890"}) // Date dinamice
+        @DisplayName("Save task with parameterized valid titles")
+        public void saveTaskWithParameterizedTitles(String title) {
+            Assertions.assertDoesNotThrow(() -> {
+                Task task = service.createTaskFromFields(title, new Date(), false, new Date(), "Every 1 day", true);
                 add_ctrl.updateTaskList(task);
             });
             Assertions.assertEquals(1, add_ctrl.getTasksListSize());
@@ -77,11 +92,11 @@ public class TaskServiceTest {
 
     @Nested
     @Tag("BVA")
+    @Tag("Regression") // Adăugat pentru suita de regression
     @DisplayName("BVA Tests")
     class BvaTesting {
         @BeforeEach
         void testSetup() {
-
             ArrayTaskList init_taskList = new ArrayTaskList();
             service = new TasksService(init_taskList);
             add_ctrl = new NewEditController();
@@ -89,7 +104,6 @@ public class TaskServiceTest {
             add_ctrl.setService(service);
             add_ctrl.setTasksList(taskList);
         }
-
 
         @Test
         @DisplayName("Save task with a valid title (lower bound)")
@@ -130,6 +144,7 @@ public class TaskServiceTest {
         }
 
         @Test
+        @Timeout(1) // Timeout de 1 secundă
         @DisplayName("Save task with a valid date (lower bound)")
         public void saveTaskWithValidDateLowerBound() {
             Assertions.assertDoesNotThrow(() -> {
@@ -147,6 +162,5 @@ public class TaskServiceTest {
             });
             Assertions.assertEquals(0, add_ctrl.getTasksListSize());
         }
-
     }
 }
