@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Main</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">tasks.view</a>
+</div>
+
+<h1>Coverage Summary for Class: Main (tasks.view)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Main</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (24/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package tasks.view;
+&nbsp;
+&nbsp;import javafx.application.Application;
+&nbsp;import javafx.collections.FXCollections;
+&nbsp;import javafx.fxml.FXMLLoader;
+&nbsp;import javafx.scene.Parent;
+&nbsp;import javafx.scene.Scene;
+&nbsp;import javafx.stage.Stage;
+&nbsp;import org.apache.log4j.Logger;
+&nbsp;import tasks.controller.Controller;
+&nbsp;import tasks.controller.Notificator;
+&nbsp;import tasks.repository.ArrayTaskList;
+&nbsp;import tasks.utils.TaskIO;
+&nbsp;import tasks.services.TasksService;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;
+<b class="fc">&nbsp;public class Main extends Application {</b>
+&nbsp;    public static Stage primaryStage;
+&nbsp;    private static final int defaultWidth = 820;
+&nbsp;    private static final int defaultHeight = 520;
+<b class="fc">&nbsp;    private static final Logger log = Logger.getLogger(Main.class.getName());</b>
+&nbsp;
+<b class="fc">&nbsp;    private ArrayTaskList savedTasksList = new ArrayTaskList();</b>
+&nbsp;
+<b class="fc">&nbsp;    private static ClassLoader classLoader = Main.class.getClassLoader();</b>
+<b class="fc">&nbsp;    public static File savedTasksFile = new File(&quot;data/tasks.txt&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;    private TasksService service = new TasksService(savedTasksList);//savedTasksList);</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void start(Stage primaryStage) throws Exception {
+&nbsp;
+<b class="fc">&nbsp;        log.info(&quot;saved data reading&quot;);</b>
+<b class="pc">&nbsp;        if (savedTasksFile.length() != 0) {</b>
+<b class="fc">&nbsp;            TaskIO.readBinary(savedTasksList, savedTasksFile);</b>
+&nbsp;        }
+&nbsp;        try {
+<b class="fc">&nbsp;            log.info(&quot;application start&quot;);</b>
+<b class="fc">&nbsp;            FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/main.fxml&quot;));</b>
+<b class="fc">&nbsp;            Parent root = loader.load();//loader.load(this.getClass().getResource(&quot;/fxml/main.fxml&quot;));</b>
+<b class="fc">&nbsp;            Controller ctrl= loader.getController();</b>
+<b class="fc">&nbsp;            service = new TasksService(savedTasksList);</b>
+&nbsp;
+<b class="fc">&nbsp;            ctrl.setService(service);</b>
+<b class="fc">&nbsp;            primaryStage.setTitle(&quot;Task Manager&quot;);</b>
+<b class="fc">&nbsp;            primaryStage.setScene(new Scene(root, defaultWidth, defaultHeight));</b>
+<b class="fc">&nbsp;            primaryStage.setMinWidth(defaultWidth);</b>
+<b class="fc">&nbsp;            primaryStage.setMinHeight(defaultHeight);</b>
+<b class="fc">&nbsp;            primaryStage.show();</b>
+&nbsp;        }
+&nbsp;        catch (IOException e){
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            log.error(&quot;error reading main.fxml&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        primaryStage.setOnCloseRequest(we -&gt; {</b>
+<b class="fc">&nbsp;                System.exit(0);</b>
+&nbsp;            });
+<b class="fc">&nbsp;        new Notificator(FXCollections.observableArrayList(service.getObservableList())).start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+<b class="fc">&nbsp;        launch(args);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-13 14:32</div>
+</div>
+</body>
+</html>

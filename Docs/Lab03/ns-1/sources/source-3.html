@@ -1,0 +1,421 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TaskServiceTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">tasks.services</a>
+</div>
+
+<h1>Coverage Summary for Class: TaskServiceTest (tasks.services)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TaskServiceTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TaskServiceTest$BvaTesting</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62.5%
+  </span>
+  <span class="absValue">
+    (5/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.5%
+  </span>
+  <span class="absValue">
+    (67/68)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TaskServiceTest$EcpTesting</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.4%
+  </span>
+  <span class="absValue">
+    (19/22)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    93.5%
+  </span>
+  <span class="absValue">
+    (29/31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62.5%
+  </span>
+  <span class="absValue">
+    (5/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.9%
+  </span>
+  <span class="absValue">
+    (94/98)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package tasks.services;
+&nbsp;
+&nbsp;import javafx.collections.FXCollections;
+&nbsp;import javafx.collections.ObservableList;
+&nbsp;import org.junit.jupiter.api.*;
+&nbsp;import tasks.controller.NewEditController;
+&nbsp;import tasks.model.Task;
+&nbsp;import tasks.repository.ArrayTaskList;
+&nbsp;
+&nbsp;import java.lang.reflect.Field;
+&nbsp;import java.util.Date;
+&nbsp;import org.junit.jupiter.params.ParameterizedTest;
+&nbsp;import org.junit.jupiter.params.provider.ValueSource;
+&nbsp;
+&nbsp;@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+&nbsp;@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Pentru controlul ordinii testelor
+<b class="fc">&nbsp;public class TaskServiceTest {</b>
+&nbsp;    static private TasksService service;
+&nbsp;    static NewEditController add_ctrl;
+&nbsp;
+&nbsp;    @BeforeAll
+&nbsp;    static void generalSetUp() {
+<b class="fc">&nbsp;        ArrayTaskList init_taskList = new ArrayTaskList();</b>
+<b class="fc">&nbsp;        service = new TasksService(init_taskList);</b>
+<b class="fc">&nbsp;        add_ctrl = new NewEditController();</b>
+<b class="fc">&nbsp;        ObservableList&lt;Task&gt; taskList = service.getObservableList();</b>
+<b class="fc">&nbsp;        add_ctrl.setService(service);</b>
+<b class="fc">&nbsp;        add_ctrl.setTasksList(taskList);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @AfterAll
+&nbsp;    static void bigCleaning() {
+<b class="fc">&nbsp;        service = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Nested
+&nbsp;    @Tag(&quot;ECP&quot;)
+&nbsp;    @Tag(&quot;Regression&quot;) // Adăugat pentru suita de regression
+&nbsp;    @DisplayName(&quot;ECP Tests&quot;)
+<b class="fc">&nbsp;    class EcpTesting {</b>
+&nbsp;        @BeforeEach
+&nbsp;        void testSetup() {
+<b class="fc">&nbsp;            ArrayTaskList init_taskList = new ArrayTaskList();</b>
+<b class="fc">&nbsp;            service = new TasksService(init_taskList);</b>
+<b class="fc">&nbsp;            add_ctrl = new NewEditController();</b>
+<b class="fc">&nbsp;            ObservableList&lt;Task&gt; taskList = service.getObservableList();</b>
+<b class="fc">&nbsp;            add_ctrl.setService(service);</b>
+<b class="fc">&nbsp;            add_ctrl.setTasksList(taskList);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @Order(1) // Rulează primul
+&nbsp;        @Timeout(2) // Timeout de 2 secunde
+&nbsp;        @DisplayName(&quot;Save task with a valid description&quot;)
+&nbsp;        public void saveTaskWithValidTitle() {
+<b class="fc">&nbsp;            Assertions.assertDoesNotThrow(() -&gt; {</b>
+<b class="fc">&nbsp;                Task task = service.createTaskFromFields(&quot;Sample&quot;, new Date(), false, new Date(), &quot;Every 1 day&quot;, true);</b>
+<b class="fc">&nbsp;                add_ctrl.updateTaskList(task);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(1, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @Disabled(&quot;Dezactivat temporar - necesită investigație&quot;) // Test dezactivat
+&nbsp;        @DisplayName(&quot;Save task with an invalid description&quot;)
+&nbsp;        public void saveTaskWithInvalidTitle() {
+<b class="nc">&nbsp;            Assertions.assertThrows(IllegalArgumentException.class, () -&gt; {</b>
+<b class="nc">&nbsp;                service.createTaskFromFields(&quot;   &quot;, new Date(), false, new Date(), &quot;Every 7 days&quot;, true);</b>
+&nbsp;            });
+<b class="nc">&nbsp;            Assertions.assertEquals(0, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @RepeatedTest(3) // Rulează de 3 ori
+&nbsp;        @DisplayName(&quot;Save task with a valid date (repeated)&quot;)
+&nbsp;        public void saveTaskWithValidDateRepeated() {
+<b class="fc">&nbsp;            Assertions.assertDoesNotThrow(() -&gt; {</b>
+<b class="fc">&nbsp;                Task task = service.createTaskFromFields(&quot;Title&quot;, new Date(124, 4, 21), false, new Date(), &quot;Every 1 day&quot;, true);</b>
+<b class="fc">&nbsp;                add_ctrl.updateTaskList(task);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(1, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @ParameterizedTest
+&nbsp;        @ValueSource(strings = {&quot;A&quot;, &quot;Valid Title&quot;, &quot;123456789012345678901234567890&quot;}) // Date dinamice
+&nbsp;        @DisplayName(&quot;Save task with parameterized valid titles&quot;)
+&nbsp;        public void saveTaskWithParameterizedTitles(String title) {
+<b class="fc">&nbsp;            Assertions.assertDoesNotThrow(() -&gt; {</b>
+<b class="fc">&nbsp;                Task task = service.createTaskFromFields(title, new Date(), false, new Date(), &quot;Every 1 day&quot;, true);</b>
+<b class="fc">&nbsp;                add_ctrl.updateTaskList(task);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(1, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Nested
+&nbsp;    @Tag(&quot;BVA&quot;)
+&nbsp;    @Tag(&quot;Regression&quot;) // Adăugat pentru suita de regression
+&nbsp;    @DisplayName(&quot;BVA Tests&quot;)
+<b class="fc">&nbsp;    class BvaTesting {</b>
+&nbsp;        @BeforeEach
+&nbsp;        void testSetup() {
+<b class="fc">&nbsp;            ArrayTaskList init_taskList = new ArrayTaskList();</b>
+<b class="fc">&nbsp;            service = new TasksService(init_taskList);</b>
+<b class="fc">&nbsp;            add_ctrl = new NewEditController();</b>
+<b class="fc">&nbsp;            ObservableList&lt;Task&gt; taskList = service.getObservableList();</b>
+<b class="fc">&nbsp;            add_ctrl.setService(service);</b>
+<b class="fc">&nbsp;            add_ctrl.setTasksList(taskList);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @DisplayName(&quot;Save task with a valid title (lower bound)&quot;)
+&nbsp;        public void saveTaskWithValidTitleLowerBound() {
+<b class="fc">&nbsp;            Assertions.assertDoesNotThrow(() -&gt; {</b>
+<b class="fc">&nbsp;                Task task = service.createTaskFromFields(&quot;T&quot;, new Date(), false, new Date(), &quot;Every 1 day&quot;, true);</b>
+<b class="fc">&nbsp;                add_ctrl.updateTaskList(task);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(1, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @DisplayName(&quot;Save task with an invalid title (empty)&quot;)
+&nbsp;        public void saveTaskWithInvalidTitleEmpty() {
+<b class="fc">&nbsp;            Assertions.assertThrows(IllegalArgumentException.class, () -&gt; {</b>
+<b class="fc">&nbsp;                service.createTaskFromFields(&quot;&quot;, new Date(), false, new Date(), &quot;Every 7 days&quot;, true);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(0, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @DisplayName(&quot;Save task with an invalid title (upper bound)&quot;)
+&nbsp;        public void saveTaskWithInvalidTitleUpperBound() {
+<b class="fc">&nbsp;            Assertions.assertThrows(IllegalArgumentException.class, () -&gt; {</b>
+<b class="fc">&nbsp;                service.createTaskFromFields(&quot;1234567890123456789012345678901&quot;, new Date(), false, new Date(), &quot;Every 7 days&quot;, true);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(0, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @DisplayName(&quot;Save task with a valid title (upper bound)&quot;)
+&nbsp;        public void saveTaskWithValidTitleUpperBound() {
+<b class="fc">&nbsp;            Assertions.assertDoesNotThrow(() -&gt; {</b>
+<b class="fc">&nbsp;                Task task = service.createTaskFromFields(&quot;123456789012345678901234567890&quot;, new Date(), false, new Date(), &quot;Every 7 days&quot;, true);</b>
+<b class="fc">&nbsp;                add_ctrl.updateTaskList(task);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(1, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @Timeout(1) // Timeout de 1 secundă
+&nbsp;        @DisplayName(&quot;Save task with a valid date (lower bound)&quot;)
+&nbsp;        public void saveTaskWithValidDateLowerBound() {
+<b class="fc">&nbsp;            Assertions.assertDoesNotThrow(() -&gt; {</b>
+<b class="fc">&nbsp;                Task task = service.createTaskFromFields(&quot;Title&quot;, new Date(), false, new Date(), &quot;Every 1 day&quot;, true);</b>
+<b class="fc">&nbsp;                add_ctrl.updateTaskList(task);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(1, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Test
+&nbsp;        @DisplayName(&quot;Save task with invalid date (end before start)&quot;)
+&nbsp;        public void saveTaskWithInvalidDateLowerBound() {
+<b class="fc">&nbsp;            Assertions.assertThrows(IllegalArgumentException.class, () -&gt; {</b>
+<b class="fc">&nbsp;                service.createTaskFromFields(&quot;Title&quot;, new Date(124, 5, 1), true, new Date(124, 4, 30), &quot;Every 1 day&quot;, true);</b>
+&nbsp;            });
+<b class="fc">&nbsp;            Assertions.assertEquals(0, add_ctrl.getTasksListSize());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;        @Test
+&nbsp;        void testIncomingNoError() {
+&nbsp;            // Creăm un ObservableList și adăugăm un task activ
+<b class="fc">&nbsp;            ObservableList&lt;Task&gt; observableTasks = FXCollections.observableArrayList();</b>
+<b class="fc">&nbsp;            Date now = new Date();</b>
+&nbsp;            // Task programat să ruleze la 30 de secunde după now
+<b class="fc">&nbsp;            Date scheduledTime = new Date(now.getTime() + 30000);</b>
+<b class="fc">&nbsp;            Task task1 = new Task(&quot;Task1&quot;, scheduledTime);</b>
+<b class="fc">&nbsp;            task1.setActive(true);</b>
+<b class="fc">&nbsp;            observableTasks.add(task1);</b>
+&nbsp;
+&nbsp;            // Inițializăm TasksOperations cu lista creată
+<b class="fc">&nbsp;            TasksOperations operations = new TasksOperations(observableTasks);</b>
+&nbsp;
+&nbsp;            // Definim un interval care îl include pe task
+<b class="fc">&nbsp;            Date start = now;</b>
+<b class="fc">&nbsp;            Date end = new Date(now.getTime() + 60000); // 1 minut mai târziu</b>
+&nbsp;
+<b class="fc">&nbsp;            Iterable&lt;Task&gt; result = operations.incoming(start, end);</b>
+<b class="fc">&nbsp;            boolean found = false;</b>
+<b class="pc">&nbsp;            for (Task t : result) {</b>
+<b class="pc">&nbsp;                if (&quot;Task1&quot;.equals(t.getTitle())) {</b>
+<b class="fc">&nbsp;                    found = true;</b>
+&nbsp;                    break;
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            Assertions.assertTrue(found, &quot;Task1 ar trebui să fie prezent în rezultatul metodei incoming.&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Testul de eroare: se folosește reflecția pentru a seta câmpul privat &#39;tasks&#39;
+&nbsp;         * din TasksOperations la null, astfel încât iterarea în metoda incoming să genereze
+&nbsp;         * o NullPointerException.
+&nbsp;         */
+&nbsp;        @Test
+&nbsp;        void testIncomingThrowsError() throws Exception {
+<b class="fc">&nbsp;            ObservableList&lt;Task&gt; observableTasks = FXCollections.observableArrayList();</b>
+<b class="fc">&nbsp;            TasksOperations operations = new TasksOperations(observableTasks);</b>
+&nbsp;
+&nbsp;            // Folosim reflecția pentru a seta câmpul privat &#39;tasks&#39; la null
+<b class="fc">&nbsp;            Field tasksField = TasksOperations.class.getDeclaredField(&quot;tasks&quot;);</b>
+<b class="fc">&nbsp;            tasksField.setAccessible(true);</b>
+<b class="fc">&nbsp;            tasksField.set(operations, null);</b>
+&nbsp;
+<b class="fc">&nbsp;            Date now = new Date();</b>
+<b class="fc">&nbsp;            Date start = now;</b>
+<b class="fc">&nbsp;            Date end = new Date(now.getTime() + 60000);</b>
+&nbsp;
+<b class="fc">&nbsp;            Assertions.assertThrows(NullPointerException.class, () -&gt; {</b>
+<b class="fc">&nbsp;                operations.incoming(start, end);</b>
+&nbsp;            }, &quot;Metoda incoming ar trebui să arunce o NullPointerException atunci când &#39;tasks&#39; este null.&quot;);
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;        @Test
+&nbsp;        void testIncomingNoNullEndDate() {
+&nbsp;            // Creăm un ObservableList și adăugăm un task activ
+<b class="fc">&nbsp;            ObservableList&lt;Task&gt; observableTasks = FXCollections.observableArrayList();</b>
+<b class="fc">&nbsp;            Date now = new Date();</b>
+&nbsp;            // Task programat să ruleze la 30 de secunde după now
+<b class="fc">&nbsp;            Date scheduledTime = new Date(now.getTime() + 30000);</b>
+<b class="fc">&nbsp;            Task task1 = new Task(&quot;Task1&quot;, scheduledTime);</b>
+<b class="fc">&nbsp;            task1.setActive(true);</b>
+<b class="fc">&nbsp;            observableTasks.add(task1);</b>
+&nbsp;
+&nbsp;            // Inițializăm TasksOperations cu lista creată
+<b class="fc">&nbsp;            TasksOperations operations = new TasksOperations(observableTasks);</b>
+&nbsp;
+&nbsp;            // Definim un interval care îl include pe task
+<b class="fc">&nbsp;            Date start = now;</b>
+<b class="fc">&nbsp;            Date end = null; // 1 minut mai târziu</b>
+&nbsp;
+<b class="fc">&nbsp;            Iterable&lt;Task&gt; result = operations.incoming(start, end);</b>
+<b class="fc">&nbsp;            boolean found = false;</b>
+<b class="fc">&nbsp;            for (Task t : result) {</b>
+<b class="pc">&nbsp;                if (&quot;Task1&quot;.equals(t.getTitle())) {</b>
+<b class="nc">&nbsp;                    found = true;</b>
+&nbsp;                    break;
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            Assertions.assertFalse(found, &quot;Task1 ar trebui să fie prezent în rezultatul metodei incoming.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-13 14:32</div>
+</div>
+</body>
+</html>

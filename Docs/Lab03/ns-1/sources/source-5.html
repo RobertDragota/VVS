@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TasksService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">tasks.services</a>
+</div>
+
+<h1>Coverage Summary for Class: TasksService (tasks.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TasksService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (5/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    21.1%
+  </span>
+  <span class="absValue">
+    (8/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37.9%
+  </span>
+  <span class="absValue">
+    (22/58)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;// Java
+&nbsp;package tasks.services;
+&nbsp;
+&nbsp;import javafx.collections.FXCollections;
+&nbsp;import javafx.collections.ObservableList;
+&nbsp;import tasks.repository.ArrayTaskList;
+&nbsp;import tasks.model.Task;
+&nbsp;import tasks.validator.TaskValidator;
+&nbsp;import tasks.validator.Validation;
+&nbsp;
+&nbsp;import java.time.DayOfWeek;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.ZoneId;
+&nbsp;import java.time.temporal.ChronoUnit;
+&nbsp;import java.time.temporal.IsoFields;
+&nbsp;import java.time.temporal.TemporalAdjusters;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;import java.util.regex.Matcher;
+&nbsp;import java.util.regex.Pattern;
+&nbsp;
+&nbsp;public class TasksService {
+&nbsp;    private final ArrayTaskList tasks;
+<b class="fc">&nbsp;    private static final Validation validator = new TaskValidator();</b>
+<b class="fc">&nbsp;    public TasksService(ArrayTaskList tasks) {</b>
+<b class="fc">&nbsp;        this.tasks = tasks;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the list of tasks as an observable list for JavaFX components.
+&nbsp;     * @return ObservableList of tasks.
+&nbsp;     */
+&nbsp;    public ObservableList&lt;Task&gt; getObservableList() {
+&nbsp;
+<b class="fc">&nbsp;        return FXCollections.observableArrayList(tasks.getAll());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Formats the repeat interval of a task in HH:MM format.
+&nbsp;     * @param task The task to extract interval from.
+&nbsp;     * @return Formatted interval in HH:MM.
+&nbsp;     */
+&nbsp;    public String getIntervalInHours(Task task) {
+<b class="nc">&nbsp;        int seconds = task.getRepeatInterval();</b>
+<b class="nc">&nbsp;        int minutes = seconds / DateService.SECONDS_IN_MINUTE;</b>
+<b class="nc">&nbsp;        int hours = minutes / DateService.MINUTES_IN_HOUR;</b>
+<b class="nc">&nbsp;        minutes %= DateService.MINUTES_IN_HOUR;</b>
+<b class="nc">&nbsp;        return formatTimeUnit(hours) + &quot;:&quot; + formatTimeUnit(minutes);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ensures time unit values have two-digit formatting.
+&nbsp;     * @param timeUnit The time unit value.
+&nbsp;     * @return Formatted string with two-digit representation.
+&nbsp;     */
+&nbsp;    public String formatTimeUnit(int timeUnit) {
+<b class="nc">&nbsp;        return (timeUnit &lt; 10 ? &quot;0&quot; : &quot;&quot;) + timeUnit;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a time string to seconds.
+&nbsp;     * Supports HH:MM format or a numeric value with a unit (days, weeks, months, hours, minutes).
+&nbsp;     * For months, 30 days are assumed.
+&nbsp;     *
+&nbsp;     * @param timeString The time string (e.g., &quot;02:30&quot;, &quot;1 day&quot;, &quot;2 weeks&quot;, &quot;3 months&quot;).
+&nbsp;     * @return Time in seconds.
+&nbsp;     */
+&nbsp;    public int convertTimeToSeconds(String timeString) {
+<b class="pc">&nbsp;        if (timeString == null || timeString.trim().isEmpty()) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Time string cannot be empty&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        timeString = timeString.trim();</b>
+&nbsp;        // Check if time is in HH:MM format
+<b class="pc">&nbsp;        if (timeString.matches(&quot;\\d{1,2}:\\d{2}&quot;)) {</b>
+<b class="nc">&nbsp;            String[] parts = timeString.split(&quot;:&quot;);</b>
+<b class="nc">&nbsp;            int hours = Integer.parseInt(parts[0]);</b>
+<b class="nc">&nbsp;            int minutes = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;            return (hours * DateService.MINUTES_IN_HOUR + minutes) * DateService.SECONDS_IN_MINUTE;</b>
+&nbsp;        }
+&nbsp;        // Otherwise, check for numeric value with unit (e.g., &quot;1 day&quot;, &quot;2 weeks&quot;)
+<b class="fc">&nbsp;        Pattern pattern = Pattern.compile(&quot;(\\d+)\\s*(day|days|week|weeks|month|months|hour|hours|minute|minutes)&quot;, Pattern.CASE_INSENSITIVE);</b>
+<b class="fc">&nbsp;        Matcher matcher = pattern.matcher(timeString);</b>
+<b class="pc">&nbsp;        if (matcher.find()) {</b>
+<b class="fc">&nbsp;            int value = Integer.parseInt(matcher.group(1));</b>
+<b class="fc">&nbsp;            String unit = matcher.group(2).toLowerCase();</b>
+<b class="pc">&nbsp;            switch(unit) {</b>
+&nbsp;                case &quot;day&quot;:
+&nbsp;                case &quot;days&quot;:
+<b class="fc">&nbsp;                    return value * 24 * 3600;</b>
+&nbsp;                case &quot;week&quot;:
+&nbsp;                case &quot;weeks&quot;:
+<b class="nc">&nbsp;                    return value * 7 * 24 * 3600;</b>
+&nbsp;                case &quot;month&quot;:
+&nbsp;                case &quot;months&quot;:
+<b class="nc">&nbsp;                    return value * 30 * 24 * 3600;</b>
+&nbsp;                case &quot;hour&quot;:
+&nbsp;                case &quot;hours&quot;:
+<b class="nc">&nbsp;                    return value * 3600;</b>
+&nbsp;                case &quot;minute&quot;:
+&nbsp;                case &quot;minutes&quot;:
+<b class="nc">&nbsp;                    return value * 60;</b>
+&nbsp;                default:
+&nbsp;                    break;
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        throw new IllegalArgumentException(&quot;Invalid time format. Use HH\\:MM or specify unit (days, weeks, months, hours, minutes)&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Filters tasks that have scheduled occurrences between the given dates.
+&nbsp;     * @param start Start date.
+&nbsp;     * @param end End date.
+&nbsp;     * @return Iterable containing filtered tasks.
+&nbsp;     */
+&nbsp;    public Iterable&lt;Task&gt; filterTasks(Date start, Date end) {
+<b class="nc">&nbsp;        return new TasksOperations(getObservableList()).incoming(start, end);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a Task object based on provided user inputs.
+&nbsp;     * @param title The task title.
+&nbsp;     * @param startDate The start date.
+&nbsp;     * @param isRepeated Whether the task is repeated.
+&nbsp;     * @param endDate The end date (if repeated).
+&nbsp;     * @param interval The interval (if repeated).
+&nbsp;     * @param isActive Whether the task is active.
+&nbsp;     * @return A new Task object.
+&nbsp;     */
+&nbsp;    public Task createTaskFromFields(String title, Date startDate, boolean isRepeated, Date endDate, String interval, boolean isActive) {
+<b class="fc">&nbsp;        Task task = null;</b>
+<b class="fc">&nbsp;        if (isRepeated) {</b>
+<b class="fc">&nbsp;            int newInterval = convertTimeToSeconds(interval);</b>
+<b class="pc">&nbsp;            if (startDate.after(endDate)) throw new IllegalArgumentException(&quot;Start date should be before end&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            task = new Task(title, startDate, endDate, newInterval);</b>
+&nbsp;
+<b class="nc">&nbsp;            task.setActive(isActive);</b>
+&nbsp;
+&nbsp;        } else {
+<b class="fc">&nbsp;            task = new Task(title, startDate);</b>
+<b class="fc">&nbsp;            task.setActive(isActive);</b>
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        validator.validateTask(task);</b>
+<b class="fc">&nbsp;        return task;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns tasks whose start date fall on even or odd weeks.
+&nbsp;     * @param filterDate If true, returns tasks in even weeks; if false, returns tasks in odd weeks.
+&nbsp;     * @return List of tasks filtered by week parity.
+&nbsp;     */
+&nbsp;    public List&lt;Task&gt; getTasksForWeek(LocalDate filterDate) {
+<b class="nc">&nbsp;        List&lt;Task&gt; filteredTasks = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Task task : tasks) {</b>
+<b class="nc">&nbsp;            LocalDate taskStart = task.getStartTime().toInstant()</b>
+<b class="nc">&nbsp;                    .atZone(ZoneId.systemDefault()).toLocalDate();</b>
+<b class="nc">&nbsp;            LocalDate taskWeekStart = taskStart.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));</b>
+<b class="nc">&nbsp;            LocalDate filterWeekStart = filterDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));</b>
+<b class="nc">&nbsp;            long weeksDiff = ChronoUnit.WEEKS.between(taskWeekStart, filterWeekStart);</b>
+<b class="nc">&nbsp;            if (weeksDiff &lt; 0) {</b>
+&nbsp;                continue;
+&nbsp;            }
+<b class="nc">&nbsp;            if (!task.isRepeated() &amp;&amp; weeksDiff == 0) {</b>
+<b class="nc">&nbsp;                filteredTasks.add(task);</b>
+<b class="nc">&nbsp;            } else if (task.isRepeated()) {</b>
+<b class="nc">&nbsp;                int recurrenceWeeks = task.getRepeatInterval() / 604800; // 604800 seconds in a week</b>
+<b class="nc">&nbsp;                if (recurrenceWeeks &lt;= 0) {</b>
+<b class="nc">&nbsp;                    recurrenceWeeks = 1;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (weeksDiff % recurrenceWeeks == 0) {</b>
+<b class="nc">&nbsp;                    filteredTasks.add(task);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return filteredTasks;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-13 14:32</div>
+</div>
+</body>
+</html>

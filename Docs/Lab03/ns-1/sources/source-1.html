@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BbtTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">tasks.services</a>
+</div>
+
+<h1>Coverage Summary for Class: BbtTest (tasks.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BbtTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package tasks.services;
+&nbsp;
+&nbsp;import javafx.collections.ObservableList;
+&nbsp;import org.junit.jupiter.api.Assertions;
+&nbsp;import org.junit.jupiter.api.BeforeEach;
+&nbsp;import org.junit.jupiter.api.Test;
+&nbsp;
+&nbsp;import tasks.controller.NewEditController;
+&nbsp;import tasks.model.Task;
+&nbsp;import tasks.repository.ArrayTaskList;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;
+<b class="nc">&nbsp;public class BbtTest {</b>
+&nbsp;    private TasksService service;
+&nbsp;    NewEditController add_ctrl;
+&nbsp;    @BeforeEach
+&nbsp;    public void setUp() {
+<b class="nc">&nbsp;        ArrayTaskList init_taskList = new ArrayTaskList();</b>
+<b class="nc">&nbsp;        service = new TasksService(init_taskList);</b>
+<b class="nc">&nbsp;        add_ctrl = new NewEditController();</b>
+<b class="nc">&nbsp;        ObservableList&lt;Task&gt; taskList = service.getObservableList();</b>
+<b class="nc">&nbsp;        add_ctrl.setService(service);</b>
+<b class="nc">&nbsp;        add_ctrl.setTasksList(taskList);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // ECP
+&nbsp;    @Test
+&nbsp;    public void saveTaskWithValidTitle() {
+&nbsp;
+<b class="nc">&nbsp;        Date customStartDate = new Date(70, 1, 1);</b>
+<b class="nc">&nbsp;        Date customEndDate = new Date(124, 11, 31);</b>
+&nbsp;
+<b class="nc">&nbsp;        Task task = service.createTaskFromFields(&quot;Title&quot;, customStartDate, false, customEndDate, &quot;Every 7 days&quot;, true);</b>
+&nbsp;
+<b class="nc">&nbsp;        Assertions.assertDoesNotThrow(() -&gt; add_ctrl.updateTaskList(task));</b>
+<b class="nc">&nbsp;        Assertions.assertEquals(1, add_ctrl.getTasksListSize());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void saveTaskWithInvalidTitle() {
+<b class="nc">&nbsp;        Date customStartDate = new Date(123, 4, 12);</b>
+<b class="nc">&nbsp;        Date customEndDate = new Date(124, 3, 28);</b>
+<b class="nc">&nbsp;        Assertions.assertThrows(IllegalArgumentException.class, () -&gt; {</b>
+<b class="nc">&nbsp;            Task task = service.createTaskFromFields(&quot;    &quot;, customStartDate,false, customEndDate, &quot;Every 7 days&quot;, true);</b>
+<b class="nc">&nbsp;            add_ctrl.updateTaskList(task);</b>
+&nbsp;        });
+<b class="nc">&nbsp;        Assertions.assertEquals(0, add_ctrl.getTasksListSize());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // BVA
+&nbsp;    @Test
+&nbsp;    public void saveTaskWithValidTitleBva() {
+<b class="nc">&nbsp;        Date customStartDate = new Date(123, 12, 2);</b>
+<b class="nc">&nbsp;        Date customEndDate = new Date(124, 3, 28);</b>
+<b class="nc">&nbsp;            Task task = service.createTaskFromFields(&quot;aaaaaaaaaabbbbbbbbbbcccccccccc&quot;, customStartDate,false, customEndDate, &quot;Every 7 days&quot;, true);</b>
+&nbsp;
+<b class="nc">&nbsp;        Assertions.assertDoesNotThrow(() -&gt; {</b>
+<b class="nc">&nbsp;            add_ctrl.updateTaskList(task);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        Assertions.assertEquals(1,add_ctrl.getTasksListSize());</b>
+<b class="nc">&nbsp;        Assertions.assertEquals(add_ctrl.getTasksList().get(0), task);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void saveTaskWithInvalidTitleBva() {
+<b class="nc">&nbsp;        Date customStartDate = new Date(123, 4, 12);</b>
+<b class="nc">&nbsp;        Date customEndDate = new Date(124, 3, 28);</b>
+<b class="nc">&nbsp;        Assertions.assertThrows(Exception.class, () -&gt; {</b>
+<b class="nc">&nbsp;            Task task = service.createTaskFromFields(&quot;aaaaaaaaaabbbbbbbbbbccccccccccd&quot;, customStartDate,false, customEndDate, &quot;Every 7 days&quot;, true);</b>
+<b class="nc">&nbsp;            add_ctrl.updateTaskList(task);</b>
+&nbsp;        });
+<b class="nc">&nbsp;        Assertions.assertEquals(0, add_ctrl.getTasksListSize());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-13 14:32</div>
+</div>
+</body>
+</html>
