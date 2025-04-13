@@ -34,7 +34,7 @@ public class TaskValidator implements Validation {
 
         // Interval permis: 1970-01-01 până la 2024-12-31
         Date minDate = new Date(70, 0, 1);  // 1970-01-01 (year=70, month=0, day=1)
-        Date maxDate = new Date(124, 11, 31); // 2024-12-31 (year=124, month=11, day=31)
+        Date maxDate = new Date(130, 11, 31); // 2024-12-31 (year=124, month=11, day=31)
         // Notă: Constructorul Date(int year, int month, int date) consideră year = an - 1900.
 
         if (start.before(minDate) || start.after(maxDate)) {

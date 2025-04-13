@@ -1,11 +1,13 @@
 package tasks.services;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.*;
 import tasks.controller.NewEditController;
 import tasks.model.Task;
 import tasks.repository.ArrayTaskList;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -161,6 +163,90 @@ public class TaskServiceTest {
                 service.createTaskFromFields("Title", new Date(124, 5, 1), true, new Date(124, 4, 30), "Every 1 day", true);
             });
             Assertions.assertEquals(0, add_ctrl.getTasksListSize());
+        }
+
+
+        @Test
+        void testIncomingNoError() {
+            // Creăm un ObservableList și adăugăm un task activ
+            ObservableList<Task> observableTasks = FXCollections.observableArrayList();
+            Date now = new Date();
+            // Task programat să ruleze la 30 de secunde după now
+            Date scheduledTime = new Date(now.getTime() + 30000);
+            Task task1 = new Task("Task1", scheduledTime);
+            task1.setActive(true);
+            observableTasks.add(task1);
+
+            // Inițializăm TasksOperations cu lista creată
+            TasksOperations operations = new TasksOperations(observableTasks);
+
+            // Definim un interval care îl include pe task
+            Date start = now;
+            Date end = new Date(now.getTime() + 60000); // 1 minut mai târziu
+
+            Iterable<Task> result = operations.incoming(start, end);
+            boolean found = false;
+            for (Task t : result) {
+                if ("Task1".equals(t.getTitle())) {
+                    found = true;
+                    break;
+                }
+            }
+            Assertions.assertTrue(found, "Task1 ar trebui să fie prezent în rezultatul metodei incoming.");
+        }
+
+        /**
+         * Testul de eroare: se folosește reflecția pentru a seta câmpul privat 'tasks'
+         * din TasksOperations la null, astfel încât iterarea în metoda incoming să genereze
+         * o NullPointerException.
+         */
+        @Test
+        void testIncomingThrowsError() throws Exception {
+            ObservableList<Task> observableTasks = FXCollections.observableArrayList();
+            TasksOperations operations = new TasksOperations(observableTasks);
+
+            // Folosim reflecția pentru a seta câmpul privat 'tasks' la null
+            Field tasksField = TasksOperations.class.getDeclaredField("tasks");
+            tasksField.setAccessible(true);
+            tasksField.set(operations, null);
+
+            Date now = new Date();
+            Date start = now;
+            Date end = new Date(now.getTime() + 60000);
+
+            Assertions.assertThrows(NullPointerException.class, () -> {
+                operations.incoming(start, end);
+            }, "Metoda incoming ar trebui să arunce o NullPointerException atunci când 'tasks' este null.");
+        }
+
+
+        @Test
+        void testIncomingNoNullEndDate() {
+            // Creăm un ObservableList și adăugăm un task activ
+            ObservableList<Task> observableTasks = FXCollections.observableArrayList();
+            Date now = new Date();
+            // Task programat să ruleze la 30 de secunde după now
+            Date scheduledTime = new Date(now.getTime() + 30000);
+            Task task1 = new Task("Task1", scheduledTime);
+            task1.setActive(true);
+            observableTasks.add(task1);
+
+            // Inițializăm TasksOperations cu lista creată
+            TasksOperations operations = new TasksOperations(observableTasks);
+
+            // Definim un interval care îl include pe task
+            Date start = now;
+            Date end = null; // 1 minut mai târziu
+
+            Iterable<Task> result = operations.incoming(start, end);
+            boolean found = false;
+            for (Task t : result) {
+                if ("Task1".equals(t.getTitle())) {
+                    found = true;
+                    break;
+                }
+            }
+            Assertions.assertFalse(found, "Task1 ar trebui să fie prezent în rezultatul metodei incoming.");
         }
     }
 }
