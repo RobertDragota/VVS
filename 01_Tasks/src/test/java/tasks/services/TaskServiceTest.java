@@ -221,7 +221,7 @@ public class TaskServiceTest {
 
 
         @Test
-        void testIncomingNoNullEndDate() {
+        void testIncomingNullEndDate() {
             // Creăm un ObservableList și adăugăm un task activ
             ObservableList<Task> observableTasks = FXCollections.observableArrayList();
             Date now = new Date();
