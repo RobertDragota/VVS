@@ -1,7 +1,6 @@
 package tasks.repository;
 
 import org.junit.jupiter.api.Test;
-import tasks.repository.ArrayTaskList;
 import tasks.model.Task;
 
 import java.util.Date;
