@@ -1,5 +1,6 @@
 package tasks.services;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,6 +74,64 @@ public class BbtTest {
             add_ctrl.updateTaskList(task);
         });
         Assertions.assertEquals(0, add_ctrl.getTasksListSize());
+    }
+
+    @Test
+    void testIncomingNullEndDate() {
+        // Creăm un ObservableList și adăugăm un task activ
+        ObservableList<Task> observableTasks = FXCollections.observableArrayList();
+        Date now = new Date();
+        // Task programat să ruleze la 30 de secunde după now
+        Date scheduledTime = new Date(now.getTime() + 30000);
+        Task task1 = new Task("Task1", scheduledTime);
+        task1.setActive(true);
+        observableTasks.add(task1);
+
+        // Inițializăm TasksOperations cu lista creată
+        TasksOperations operations = new TasksOperations(observableTasks);
+
+        // Definim un interval care îl include pe task
+        Date start = now;
+        Date end = null; // 1 minut mai târziu
+
+        Iterable<Task> result = operations.incoming(start, end);
+        boolean found = false;
+        for (Task t : result) {
+            if ("Task1".equals(t.getTitle())) {
+                found = true;
+                break;
+            }
+        }
+        Assertions.assertFalse(found, "Task1 ar trebui să fie prezent în rezultatul metodei incoming.");
+    }
+
+    @Test
+    void testIncomingNoError() {
+        // Creăm un ObservableList și adăugăm un task activ
+        ObservableList<Task> observableTasks = FXCollections.observableArrayList();
+        Date now = new Date();
+        // Task programat să ruleze la 30 de secunde după now
+        Date scheduledTime = new Date(now.getTime() + 30000);
+        Task task1 = new Task("Task1", scheduledTime);
+        task1.setActive(true);
+        observableTasks.add(task1);
+
+        // Inițializăm TasksOperations cu lista creată
+        TasksOperations operations = new TasksOperations(observableTasks);
+
+        // Definim un interval care îl include pe task
+        Date start = now;
+        Date end = new Date(now.getTime() + 60000); // 1 minut mai târziu
+
+        Iterable<Task> result = operations.incoming(start, end);
+        boolean found = false;
+        for (Task t : result) {
+            if ("Task1".equals(t.getTitle())) {
+                found = true;
+                break;
+            }
+        }
+        Assertions.assertTrue(found, "Task1 ar trebui să fie prezent în rezultatul metodei incoming.");
     }
 
 }
