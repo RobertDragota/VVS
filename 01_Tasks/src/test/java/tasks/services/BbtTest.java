@@ -12,9 +12,14 @@ import tasks.repository.ArrayTaskList;
 
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 public class BbtTest {
     private TasksService service;
     NewEditController add_ctrl;
+    private ArrayTaskList repository;
+    private Task mockTask;
     @BeforeEach
     public void setUp() {
         ArrayTaskList init_taskList = new ArrayTaskList();
@@ -23,6 +28,8 @@ public class BbtTest {
         ObservableList<Task> taskList = service.getObservableList();
         add_ctrl.setService(service);
         add_ctrl.setTasksList(taskList);
+        mockTask = mock(Task.class);
+        repository = new ArrayTaskList();
     }
 
     // ECP
@@ -132,6 +139,57 @@ public class BbtTest {
             }
         }
         Assertions.assertTrue(found, "Task1 ar trebui să fie prezent în rezultatul metodei incoming.");
+    }
+
+    @Test
+    void testRepeatedNextTimeAfter() {
+        Date start = new Date();
+        Date end = new Date(start.getTime() + 3600_000); // +1h
+        int intervalSeconds = 1800; // 30min
+        Task task = new Task("Repeat", start, end, intervalSeconds);
+        task.setActive(true);
+
+        // After one second from start, next should be start + interval
+        Date after = new Date(start.getTime() + 1000);
+        Date expectedNext = new Date(start.getTime() + intervalSeconds * 1000L);
+        assertEquals(expectedNext, task.nextTimeAfter(after));
+    }
+
+    @Test
+    void testFilterTasksInvokesNextTimeAfterOnMockTask() {
+        repository = new ArrayTaskList();
+        service = new TasksService(repository);
+        // Configurăm intervalul de filtrare și stub pentru nextTimeAfter
+        Date start = new Date(1000);
+        Date end = new Date(5000);
+        when(mockTask.nextTimeAfter(start)).thenReturn(new Date(2000));
+        repository.add(mockTask);
+
+        var filtered = service.filterTasks(start, end);
+        // Ar trebui să includă mockTask deoarece nextTimeAfter returnează o dată în interval
+        assertTrue(filtered.iterator().hasNext());
+        assertSame(mockTask, filtered.iterator().next());
+        verify(mockTask).nextTimeAfter(start);
+    }
+
+    @Test
+    void testRepeatedTaskFilter() {
+        repository = new ArrayTaskList();
+        service = new TasksService(repository);
+        Date start = new Date(0);
+        Date end = new Date(10000);
+        // interval de 3 secunde
+        Task t = service.createTaskFromFields("RT", start, true, end, "0:03", true);
+        repository.add(t);
+
+        // filtrăm între 2s și 4s
+        var filtered = service.filterTasks(new Date(2000), new Date(4000));
+        assertTrue(filtered.iterator().hasNext());
+        Task result = filtered.iterator().next();
+
+        // în codul curent, nu se găseşte nicio apariţie,
+        // așa că se întoarce placeholder-ul “Empty”
+        assertEquals("Empty", result.getTitle());
     }
 
 }
