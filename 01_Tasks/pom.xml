@@ -122,11 +122,6 @@
             --add-opens tasks/tasks.model=ALL-UNNAMED
             --add-opens tasks/tasks.persistence=ALL-UNNAMED
             --add-opens tasks/tasks.services=ALL-UNNAMED
-            --add-opens tasks/tasks.integration=ALL-UNNAMED
-            --add-opens tasks/tasks.repository=ALL-UNNAMED
-            --add-opens tasks/tasks.task=ALL-UNNAMED
-            --add-opens tasks/tasks.service_test=ALL-UNNAMED
-            --add-opens tasks/tasks.validator=ALL-UNNAMED
           </argLine>
         </configuration>
       </plugin>
